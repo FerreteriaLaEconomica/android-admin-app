@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Ferretería Admin</string>
+    <string name="sign_up">Regístrate</string>
+    <string name="log_in">Iniciar sesión</string>
+</resources>
