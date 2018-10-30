@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -20,6 +21,7 @@ import com.smontiel.ferretera.admin.R;
 import com.smontiel.ferretera.admin.data.User;
 import com.smontiel.ferretera.admin.data.network.NetworkUtils;
 import com.smontiel.ferretera.admin.features.dashboard.DashboardActivity;
+import com.smontiel.ferretera.admin.features.signup.SignupActivity;
 import com.smontiel.ferretera.admin.utils.CustomEditText;
 
 import static com.smontiel.ferretera.admin.utils.Preconditions.checkNotNull;
@@ -47,6 +49,11 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     }
 
     private void initializeViews(View v) {
+        TextView createAccount = v.findViewById(R.id.createAccountTV);
+        createAccount.setOnClickListener(view -> {
+            startActivity(SignupActivity.getStartIntent(getActivity()));
+            getActivity().finish();
+        });
         emailET = v.findViewById(R.id.emailET);
         emailET.validateWith(Patterns.EMAIL_ADDRESS);
         emailET.setErrorLabel("Correo electrónico inválido");
@@ -103,7 +110,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     }
 
     @Override
-    public void onSuccess(User user) {
+    public void onLoginSuccess(User user) {
         getActivity().startActivity(DashboardActivity.getIntent(getActivity(), user));
         getActivity().finish();
     }

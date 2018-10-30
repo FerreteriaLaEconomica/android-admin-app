@@ -15,7 +15,7 @@ public interface LoginContract {
 
         void showInfoDialog(String message);
 
-        void onSuccess(User user);
+        void onLoginSuccess(User user);
     }
 
     interface Presenter extends BasePresenter {

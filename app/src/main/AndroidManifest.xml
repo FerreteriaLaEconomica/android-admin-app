@@ -20,8 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.dashboard.DashboardActivity"></activity>
-        <activity android:name=".features.signup.SignupActivity"></activity>
+        <activity android:name=".features.dashboard.DashboardActivity" />
+        <activity android:name=".features.signup.SignupActivity" />
     </application>
 
 </manifest>

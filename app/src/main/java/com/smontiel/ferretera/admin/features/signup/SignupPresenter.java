@@ -41,7 +41,7 @@ public class SignupPresenter implements SignupContract.Presenter {
                 .subscribe(response -> {
                     if (response.isSuccessful()) {
                         prefs.saveString(Constants.AUTH_TOKEN, response.headers().get(Constants.AUTHORIZATION));
-                        signupView.onSuccess();
+                        signupView.onSignupSuccess(response.body());
                     } else {
                         String body = response.errorBody().string();
                         ApiError apiError = Injector.provideGson().fromJson(body, ApiError.class);

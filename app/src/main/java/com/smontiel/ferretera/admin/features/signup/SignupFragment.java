@@ -16,6 +16,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 import com.smontiel.ferretera.admin.R;
+import com.smontiel.ferretera.admin.data.User;
 import com.smontiel.ferretera.admin.data.network.NetworkUtils;
 import com.smontiel.ferretera.admin.features.dashboard.DashboardActivity;
 import com.smontiel.ferretera.admin.utils.CustomEditText;
@@ -133,8 +134,9 @@ public class SignupFragment extends Fragment implements SignupContract.View {
     }
 
     @Override
-    public void onSuccess() {
-        getActivity().startActivity(DashboardActivity.getIntent(getActivity(), null));
+    public void onSignupSuccess(User user) {
+        getActivity().startActivity(DashboardActivity.getIntent(getActivity(), user));
+        getActivity().finish();
     }
 
     private boolean contraseñasSonIguales(String a, String b) {

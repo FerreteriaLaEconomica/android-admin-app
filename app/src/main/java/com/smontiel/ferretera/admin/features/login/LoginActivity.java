@@ -1,5 +1,7 @@
 package com.smontiel.ferretera.admin.features.login;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +15,10 @@ import com.smontiel.ferretera.admin.utils.ActivityUtils;
  * Created by Salvador Montiel on 29/10/18.
  */
 public class LoginActivity extends AppCompatActivity {
+    public static Intent getStartIntent(Context activity) {
+        return new Intent(activity, LoginActivity.class);
+    }
+
     private Toolbar toolbar;
 
     @Override

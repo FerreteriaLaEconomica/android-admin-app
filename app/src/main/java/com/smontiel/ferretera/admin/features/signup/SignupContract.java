@@ -2,6 +2,7 @@ package com.smontiel.ferretera.admin.features.signup;
 
 import com.smontiel.ferretera.admin.BasePresenter;
 import com.smontiel.ferretera.admin.BaseView;
+import com.smontiel.ferretera.admin.data.User;
 
 /**
  * Created by Salvador Montiel on 27/10/18.
@@ -13,7 +14,7 @@ public interface SignupContract {
 
         void showInfoDialog(String message);
 
-        void onSuccess();
+        void onSignupSuccess(User user);
     }
 
     interface Presenter extends BasePresenter {

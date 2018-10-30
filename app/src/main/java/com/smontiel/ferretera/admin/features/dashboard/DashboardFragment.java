@@ -26,9 +26,11 @@ public class DashboardFragment extends Fragment implements DashboardContract.Vie
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dashboard_fragment, container, false);
-
+        initializeViews(root);
         return root;
     }
+
+    private void initializeViews(View view) {}
 
     @Override
     public void onResume() {

@@ -1,7 +1,5 @@
 package com.smontiel.ferretera.admin.features.login;
 
-import android.util.Log;
-
 import com.smontiel.ferretera.admin.Injector;
 import com.smontiel.ferretera.admin.data.ApiError;
 import com.smontiel.ferretera.admin.data.Constants;
@@ -48,7 +46,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                 .subscribe(response -> {
                     if (response.isSuccessful()) {
                         prefs.saveString(Constants.AUTH_TOKEN, response.headers().get(Constants.AUTHORIZATION));
-                        loginView.onSuccess(response.body());
+                        loginView.onLoginSuccess(response.body());
                     } else {
                         String body = response.errorBody().string();
                         ApiError apiError = Injector.provideGson().fromJson(body, ApiError.class);
@@ -68,10 +66,9 @@ public class LoginPresenter implements LoginContract.Presenter {
                         if (userResponse.isSuccessful()) {
                             prefs.saveString(Constants.AUTH_TOKEN,
                                     userResponse.headers().get(Constants.AUTHORIZATION));
-                            loginView.onSuccess(userResponse.body());
+                            loginView.onLoginSuccess(userResponse.body());
                         } else {
                             String body = userResponse.errorBody().string();
-                            Log.i("aA", body);
                             ApiError apiError = Injector.provideGson().fromJson(body, ApiError.class);
                             loginView.showInfoDialog(apiError.message);
                         }
