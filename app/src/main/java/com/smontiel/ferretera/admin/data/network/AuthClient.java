@@ -1,8 +1,10 @@
 package com.smontiel.ferretera.admin.data.network;
 
+import com.smontiel.ferretera.admin.data.Sucursal;
 import com.smontiel.ferretera.admin.data.User;
 import com.smontiel.ferretera.admin.data.UserDto;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Maybe;
@@ -24,4 +26,7 @@ public interface AuthClient {
 
     @POST("/users")
     Maybe<Response<User>> signUp(@Body UserDto user);
+
+    @GET("/users/sucursales")
+    Maybe<Response<List<Sucursal>>> getAllSucursalesOfCurrentUser();
 }
