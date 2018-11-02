@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Salvador Montiel on 30/10/18.
  */
-
 public class Sucursal {
     @SerializedName("id") @Expose
     public int id;
