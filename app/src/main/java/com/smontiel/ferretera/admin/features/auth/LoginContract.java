@@ -1,4 +1,4 @@
-package com.smontiel.ferretera.admin.features.login;
+package com.smontiel.ferretera.admin.features.auth;
 
 import com.smontiel.ferretera.admin.BasePresenter;
 import com.smontiel.ferretera.admin.BaseView;
@@ -14,6 +14,10 @@ public interface LoginContract {
         boolean isActive();
 
         void showInfoDialog(String message);
+
+        void showProgressDialog();
+
+        void hideProgressDialog();
 
         void onLoginSuccess(User user);
     }

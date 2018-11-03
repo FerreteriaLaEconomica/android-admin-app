@@ -1,4 +1,4 @@
-package com.smontiel.ferretera.admin.features.login;
+package com.smontiel.ferretera.admin.features.auth;
 
 import com.smontiel.ferretera.admin.Injector;
 import com.smontiel.ferretera.admin.data.ApiError;
@@ -9,6 +9,7 @@ import com.smontiel.ferretera.admin.data.network.AuthClient;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -38,12 +39,14 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void logIn(String email, String password) {
+        loginView.showProgressDialog();
         Map<String, String> credentials = new HashMap<>(2);
         credentials.put("email", email);
         credentials.put("password", password);
         Maybe<Response<User>> call = authClient.loginWithCredentials(credentials);
         Disposable disposable = call.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    loginView.hideProgressDialog();
                     if (response.isSuccessful()) {
                         prefs.saveString(Constants.AUTH_TOKEN, response.headers().get(Constants.AUTHORIZATION));
                         loginView.onLoginSuccess(response.body());
@@ -60,8 +63,9 @@ public class LoginPresenter implements LoginContract.Presenter {
     public void subscribe() {
         String token = prefs.getString(Constants.AUTH_TOKEN, "");
         if (!token.equals("")) {
+            loginView.showProgressDialog();
             Maybe<Response<User>> call = authClient.login();
-            Disposable disposable = call.observeOn(AndroidSchedulers.mainThread())
+            Disposable disposable = call.delay(3, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
                     .subscribe(userResponse -> {
                         if (userResponse.isSuccessful()) {
                             prefs.saveString(Constants.AUTH_TOKEN,
@@ -82,3 +86,4 @@ public class LoginPresenter implements LoginContract.Presenter {
         if (compositeDisposable != null) compositeDisposable.clear();
     }
 }
+

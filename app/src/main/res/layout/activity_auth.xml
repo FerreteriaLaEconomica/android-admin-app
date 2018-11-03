@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".features.signup.SignupActivity"
+    tools:context=".features.auth.AuthActivity"
     tools:openDrawer="start" >
 
     <LinearLayout
@@ -20,9 +20,7 @@
             android:id="@+id/contentFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipChildren="false" >
-
-        </FrameLayout>
+            android:clipChildren="false" />
 
     </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.smontiel.ferretera.admin.features.signup;
+package com.smontiel.ferretera.admin.features.auth;
 
 import com.smontiel.ferretera.admin.Injector;
 import com.smontiel.ferretera.admin.data.ApiError;
