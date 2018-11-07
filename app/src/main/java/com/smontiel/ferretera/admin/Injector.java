@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.smontiel.ferretera.admin.data.Constants;
 import com.smontiel.ferretera.admin.data.SharedPrefs;
+import com.smontiel.ferretera.admin.data.network.ApiClient;
 import com.smontiel.ferretera.admin.data.network.AuthClient;
 
 import io.reactivex.schedulers.Schedulers;
@@ -21,6 +22,10 @@ public class Injector {
 
     public static SharedPrefs provideSharedPrefs() {
         return SharedPrefs.getInstance(MyApp.getContext());
+    }
+
+    public static ApiClient provideApiClient() {
+        return provideRetrofit().create(ApiClient.class);
     }
 
     public static AuthClient provideAuthClient() {

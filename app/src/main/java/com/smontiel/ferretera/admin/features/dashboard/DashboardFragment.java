@@ -14,7 +14,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 import com.smontiel.ferretera.admin.R;
-import com.smontiel.ferretera.admin.data.Sucursal;
+import com.smontiel.ferretera.admin.data.models.Sucursal;
 
 import java.util.List;
 

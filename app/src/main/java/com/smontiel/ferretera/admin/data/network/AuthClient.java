@@ -1,8 +1,8 @@
 package com.smontiel.ferretera.admin.data.network;
 
-import com.smontiel.ferretera.admin.data.Sucursal;
-import com.smontiel.ferretera.admin.data.User;
-import com.smontiel.ferretera.admin.data.UserDto;
+import com.smontiel.ferretera.admin.data.models.Sucursal;
+import com.smontiel.ferretera.admin.data.models.User;
+import com.smontiel.ferretera.admin.data.models.UserDto;
 
 import java.util.List;
 import java.util.Map;

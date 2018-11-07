@@ -1,4 +1,4 @@
-package com.smontiel.ferretera.admin.data;
+package com.smontiel.ferretera.admin.data.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

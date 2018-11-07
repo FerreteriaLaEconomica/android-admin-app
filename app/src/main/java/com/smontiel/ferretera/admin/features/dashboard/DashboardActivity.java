@@ -23,8 +23,9 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.smontiel.ferretera.admin.Injector;
 import com.smontiel.ferretera.admin.R;
-import com.smontiel.ferretera.admin.data.Sucursal;
-import com.smontiel.ferretera.admin.data.User;
+import com.smontiel.ferretera.admin.data.models.Sucursal;
+import com.smontiel.ferretera.admin.data.models.User;
+import com.smontiel.ferretera.admin.features.show_products.ShowProductsActivity;
 import com.smontiel.ferretera.admin.utils.ActivityUtils;
 
 import java.util.ArrayList;
@@ -149,6 +150,10 @@ public class DashboardActivity extends AppCompatActivity {
             items.add(new PrimaryDrawerItem()
                     .withName("Productos")
                     .withIcon(MaterialDesignIconic.Icon.gmi_apps)
+                    .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                        startActivity(ShowProductsActivity.getStartIntent(DashboardActivity.this));
+                        return false;
+                    })
             );
         }
         items.add(new DividerDrawerItem());
@@ -165,5 +170,11 @@ public class DashboardActivity extends AppCompatActivity {
                 .withHeaderBackground(R.drawable.header)
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
     }
 }
