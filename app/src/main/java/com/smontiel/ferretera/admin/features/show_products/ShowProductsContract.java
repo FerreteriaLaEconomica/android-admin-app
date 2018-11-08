@@ -1,7 +1,7 @@
 package com.smontiel.ferretera.admin.features.show_products;
 
-import com.smontiel.ferretera.admin.BasePresenter;
-import com.smontiel.ferretera.admin.BaseView;
+import com.smontiel.ferretera.admin.base.BasePresenter;
+import com.smontiel.ferretera.admin.base.BaseView;
 
 import java.util.List;
 
