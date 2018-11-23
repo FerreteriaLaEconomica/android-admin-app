@@ -13,7 +13,7 @@ public class Admin {
     public String apellidos;
     @SerializedName("email") @Expose
     public String email;
-    @SerializedName("urlFoto") @Expose
+    @SerializedName("url_oto") @Expose
     public String urlFoto;
     @SerializedName("telefono") @Expose
     public String telefono;

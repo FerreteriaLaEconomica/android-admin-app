@@ -1,5 +1,6 @@
 package com.smontiel.ferretera.admin;
 
+import com.google.firebase.FirebaseApp;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,6 +20,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Salvador Montiel on 28/10/18.
  */
 public class Injector {
+
+    public static FirebaseApp provideFirebase() {
+        return FirebaseApp.getInstance();
+    }
 
     public static SharedPrefs provideSharedPrefs() {
         return SharedPrefs.getInstance(MyApp.getContext());

@@ -9,25 +9,31 @@ import com.google.gson.annotations.SerializedName;
 public class Producto {
     @SerializedName("id") @Expose
     public int id;
-    @SerializedName("codigoBarras") @Expose
+    @SerializedName("codigo_barras") @Expose
     public String codigoBarras;
     @SerializedName("nombre") @Expose
     public String nombre;
     @SerializedName("descripcion") @Expose
     public String descripcion;
-    @SerializedName("urlFoto") @Expose
+    @SerializedName("url_foto") @Expose
     public String urlFoto;
     @SerializedName("formato") @Expose
     public String formato;
     @SerializedName("categoria") @Expose
     public String categoria;
+    @SerializedName("precio_compra") @Expose
+    private double precioCompra;
+    @SerializedName("precio_venta") @Expose
+    public double precioVenta;
+    @SerializedName("porcentaje_descuento") @Expose
+    public double descuento;
 
     /**
      * No args constructor for use in serialization
      */
     public Producto() {}
 
-    public Producto(int id, String codigoBarras, String nombre, String descripcion, String urlFoto, String formato, String categoria) {
+    public Producto(int id, String codigoBarras, String nombre, String descripcion, String urlFoto, String formato, String categoria, double precioVenta, double descuento) {
         this.id = id;
         this.codigoBarras = codigoBarras;
         this.nombre = nombre;
@@ -35,6 +41,9 @@ public class Producto {
         this.urlFoto = urlFoto;
         this.formato = formato;
         this.categoria = categoria;
+        this.precioCompra = 0.00;
+        this.precioVenta = precioVenta;
+        this.descuento = descuento;
     }
 
     @Override
@@ -43,6 +52,9 @@ public class Producto {
         if (o == null || getClass() != o.getClass()) return false;
         Producto producto = (Producto) o;
         if (id != producto.id) return false;
+        if (Double.compare(producto.precioCompra, precioCompra) != 0) return false;
+        if (Double.compare(producto.precioVenta, precioVenta) != 0) return false;
+        if (Double.compare(producto.descuento, descuento) != 0) return false;
         if (codigoBarras != null ? !codigoBarras.equals(producto.codigoBarras) : producto.codigoBarras != null)
             return false;
         if (nombre != null ? !nombre.equals(producto.nombre) : producto.nombre != null)
@@ -58,13 +70,21 @@ public class Producto {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result;
+        long temp;
+        result = id;
         result = 31 * result + (codigoBarras != null ? codigoBarras.hashCode() : 0);
         result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
         result = 31 * result + (descripcion != null ? descripcion.hashCode() : 0);
         result = 31 * result + (urlFoto != null ? urlFoto.hashCode() : 0);
         result = 31 * result + (formato != null ? formato.hashCode() : 0);
         result = 31 * result + (categoria != null ? categoria.hashCode() : 0);
+        temp = Double.doubleToLongBits(precioCompra);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(precioVenta);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(descuento);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
@@ -78,6 +98,9 @@ public class Producto {
                 ", urlFoto='" + urlFoto + '\'' +
                 ", formato='" + formato + '\'' +
                 ", categoria='" + categoria + '\'' +
+                ", precioCompra=" + precioCompra +
+                ", precioVenta=" + precioVenta +
+                ", descuento=" + descuento +
                 '}';
     }
 }

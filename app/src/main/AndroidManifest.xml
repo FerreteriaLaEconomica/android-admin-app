@@ -35,6 +35,8 @@
         </provider>
 
         <activity android:name=".features.show_products.ShowProductsActivity" />
+        <activity android:name=".features.create_product.CreateProductActivity" />
+        <activity android:name=".features.show_categories.ShowCategoriesActivity" />
     </application>
 
 </manifest>

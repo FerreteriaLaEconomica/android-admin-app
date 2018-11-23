@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -28,9 +29,12 @@ public class ProductItem extends AbstractItem<ProductItem, ProductItem.ViewHolde
     public void bindView(ViewHolder holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
-        holder.icon.setImageDrawable(new IconicsDrawable(holder.itemView.getContext())
-                .colorRes(R.color.md_grey_500)
-                .icon(GoogleMaterial.Icon.gmd_shopping_basket));
+        Glide.with(holder.itemView.getContext())
+                .load(product.urlFoto)
+                .error(new IconicsDrawable(holder.itemView.getContext())
+                        .colorRes(R.color.md_grey_500)
+                        .icon(GoogleMaterial.Icon.gmd_shopping_basket))
+                .into(holder.icon);
         holder.name.setText(product.nombre);
         holder.codigoBarras.setText("Codigo barras: " + product.codigoBarras);
         holder.formato.setText(product.formato);

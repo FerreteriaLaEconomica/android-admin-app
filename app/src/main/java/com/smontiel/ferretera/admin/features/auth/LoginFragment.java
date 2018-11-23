@@ -21,6 +21,7 @@ import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import com.smontiel.ferretera.admin.R;
 import com.smontiel.ferretera.admin.data.models.User;
 import com.smontiel.ferretera.admin.data.network.NetworkUtils;
+import com.smontiel.ferretera.admin.features.create_product.CreateProductActivity;
 import com.smontiel.ferretera.admin.features.dashboard.DashboardActivity;
 import com.smontiel.ferretera.admin.utils.CustomEditText;
 
