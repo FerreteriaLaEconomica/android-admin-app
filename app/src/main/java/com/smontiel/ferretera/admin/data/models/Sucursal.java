@@ -1,4 +1,4 @@
-package com.smontiel.ferretera.admin.data;
+package com.smontiel.ferretera.admin.data.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -13,11 +13,11 @@ public class Sucursal {
     public String nombre;
     @SerializedName("calle") @Expose
     public String calle;
-    @SerializedName("numeroExterior") @Expose
+    @SerializedName("numero_exterior") @Expose
     public String numeroExterior;
     @SerializedName("colonia") @Expose
     public String colonia;
-    @SerializedName("codigoPostal") @Expose
+    @SerializedName("codigo_postal") @Expose
     public String codigoPostal;
     @SerializedName("localidad") @Expose
     public String localidad;

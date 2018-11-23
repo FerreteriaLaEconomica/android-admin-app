@@ -1,8 +1,8 @@
 package com.smontiel.ferretera.admin.features.auth;
 
-import com.smontiel.ferretera.admin.BasePresenter;
-import com.smontiel.ferretera.admin.BaseView;
-import com.smontiel.ferretera.admin.data.User;
+import com.smontiel.ferretera.admin.base.BasePresenter;
+import com.smontiel.ferretera.admin.base.BaseView;
+import com.smontiel.ferretera.admin.data.models.User;
 
 /**
  * Created by Salvador Montiel on 29/10/18.

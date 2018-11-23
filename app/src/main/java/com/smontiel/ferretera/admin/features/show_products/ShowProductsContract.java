@@ -1,28 +1,27 @@
-package com.smontiel.ferretera.admin.features.dashboard;
+package com.smontiel.ferretera.admin.features.show_products;
 
 import com.smontiel.ferretera.admin.base.BasePresenter;
 import com.smontiel.ferretera.admin.base.BaseView;
-import com.smontiel.ferretera.admin.data.models.Sucursal;
 
 import java.util.List;
 
 /**
- * Created by Salvador Montiel on 27/10/18.
+ * Created by Salvador Montiel on 4/11/18.
  */
-public interface DashboardContract {
+public interface ShowProductsContract {
     interface View extends BaseView<Presenter> {
 
         void setLoadingIndicator(boolean isLoading);
 
-        void showInfoDialog(String message);
+        void showError(String message);
 
-        void showSucursales(List<Sucursal> sucursales);
+        void showProductos(List<ProductItem> productos);
 
         boolean isActive();
     }
 
     interface Presenter extends BasePresenter {
 
-        void logOut();
+        void loadAllProducts();
     }
 }

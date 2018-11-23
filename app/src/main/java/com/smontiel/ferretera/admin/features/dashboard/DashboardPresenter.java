@@ -1,10 +1,10 @@
 package com.smontiel.ferretera.admin.features.dashboard;
 
 import com.smontiel.ferretera.admin.Injector;
-import com.smontiel.ferretera.admin.data.ApiError;
+import com.smontiel.ferretera.admin.data.models.ApiError;
 import com.smontiel.ferretera.admin.data.Constants;
 import com.smontiel.ferretera.admin.data.SharedPrefs;
-import com.smontiel.ferretera.admin.data.Sucursal;
+import com.smontiel.ferretera.admin.data.models.Sucursal;
 import com.smontiel.ferretera.admin.data.network.AuthClient;
 
 import java.util.List;

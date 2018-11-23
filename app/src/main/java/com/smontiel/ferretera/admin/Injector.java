@@ -1,10 +1,12 @@
 package com.smontiel.ferretera.admin;
 
+import com.google.firebase.FirebaseApp;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.smontiel.ferretera.admin.data.Constants;
 import com.smontiel.ferretera.admin.data.SharedPrefs;
+import com.smontiel.ferretera.admin.data.network.ApiClient;
 import com.smontiel.ferretera.admin.data.network.AuthClient;
 
 import io.reactivex.schedulers.Schedulers;
@@ -19,8 +21,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class Injector {
 
+    public static FirebaseApp provideFirebase() {
+        return FirebaseApp.getInstance();
+    }
+
     public static SharedPrefs provideSharedPrefs() {
         return SharedPrefs.getInstance(MyApp.getContext());
+    }
+
+    public static ApiClient provideApiClient() {
+        return provideRetrofit().create(ApiClient.class);
     }
 
     public static AuthClient provideAuthClient() {

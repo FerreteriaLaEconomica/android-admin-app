@@ -7,9 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -23,8 +25,10 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.smontiel.ferretera.admin.Injector;
 import com.smontiel.ferretera.admin.R;
-import com.smontiel.ferretera.admin.data.Sucursal;
-import com.smontiel.ferretera.admin.data.User;
+import com.smontiel.ferretera.admin.data.models.Sucursal;
+import com.smontiel.ferretera.admin.data.models.User;
+import com.smontiel.ferretera.admin.features.show_categories.ShowCategoriesActivity;
+import com.smontiel.ferretera.admin.features.show_products.ShowProductsActivity;
 import com.smontiel.ferretera.admin.utils.ActivityUtils;
 
 import java.util.ArrayList;
@@ -116,12 +120,21 @@ public class DashboardActivity extends AppCompatActivity {
                     .withName(s.nombre)
                     .withIcon(GoogleMaterial.Icon.gmd_local_convenience_store)
                     .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                        Toast.makeText(DashboardActivity.this, s.nombre, Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, s.nombre, Toast.LENGTH_LONG).show();
                         drawer.closeDrawer();
                         return true;
                     })
             );
         }
+        items.add(new PrimaryDrawerItem()
+                .withName("Agregar sucursal")
+                .withIcon(CommunityMaterial.Icon2.cmd_plus)
+                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                    Toast.makeText(this, "Agregar sucursal", Toast.LENGTH_LONG).show();
+                    drawer.closeDrawer();
+                    return true;
+                })
+        );
         drawer.removeAllItems();
         drawer.addItems(drawerItems(items).toArray(new IDrawerItem[0]));
         drawer.addStickyFooterItem(new PrimaryDrawerItem()
@@ -145,10 +158,18 @@ public class DashboardActivity extends AppCompatActivity {
             items.add(new PrimaryDrawerItem()
                     .withName("Categorías")
                     .withIcon(MaterialDesignIconic.Icon.gmi_collection_bookmark)
+                    .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                        startActivity(ShowCategoriesActivity.getStartIntent(DashboardActivity.this));
+                        return false;
+                    })
             );
             items.add(new PrimaryDrawerItem()
                     .withName("Productos")
                     .withIcon(MaterialDesignIconic.Icon.gmi_apps)
+                    .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                        startActivity(ShowProductsActivity.getStartIntent(DashboardActivity.this));
+                        return false;
+                    })
             );
         }
         items.add(new DividerDrawerItem());
@@ -165,5 +186,11 @@ public class DashboardActivity extends AppCompatActivity {
                 .withHeaderBackground(R.drawable.header)
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
     }
 }

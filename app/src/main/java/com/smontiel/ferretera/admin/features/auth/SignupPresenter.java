@@ -1,11 +1,11 @@
 package com.smontiel.ferretera.admin.features.auth;
 
 import com.smontiel.ferretera.admin.Injector;
-import com.smontiel.ferretera.admin.data.ApiError;
+import com.smontiel.ferretera.admin.data.models.ApiError;
 import com.smontiel.ferretera.admin.data.Constants;
 import com.smontiel.ferretera.admin.data.SharedPrefs;
-import com.smontiel.ferretera.admin.data.User;
-import com.smontiel.ferretera.admin.data.UserDto;
+import com.smontiel.ferretera.admin.data.models.User;
+import com.smontiel.ferretera.admin.data.models.UserDto;
 import com.smontiel.ferretera.admin.data.network.AuthClient;
 
 import io.reactivex.Maybe;

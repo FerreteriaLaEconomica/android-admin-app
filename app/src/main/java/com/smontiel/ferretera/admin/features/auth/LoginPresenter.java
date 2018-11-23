@@ -1,15 +1,14 @@
 package com.smontiel.ferretera.admin.features.auth;
 
 import com.smontiel.ferretera.admin.Injector;
-import com.smontiel.ferretera.admin.data.ApiError;
+import com.smontiel.ferretera.admin.data.models.ApiError;
 import com.smontiel.ferretera.admin.data.Constants;
 import com.smontiel.ferretera.admin.data.SharedPrefs;
-import com.smontiel.ferretera.admin.data.User;
+import com.smontiel.ferretera.admin.data.models.User;
 import com.smontiel.ferretera.admin.data.network.AuthClient;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -65,7 +64,7 @@ public class LoginPresenter implements LoginContract.Presenter {
         if (!token.equals("")) {
             loginView.showProgressDialog();
             Maybe<Response<User>> call = authClient.login();
-            Disposable disposable = call.delay(3, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
+            Disposable disposable = call.observeOn(AndroidSchedulers.mainThread())
                     .subscribe(userResponse -> {
                         if (userResponse.isSuccessful()) {
                             prefs.saveString(Constants.AUTH_TOKEN,

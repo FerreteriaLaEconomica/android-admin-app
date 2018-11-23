@@ -33,6 +33,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths_public" />
         </provider>
+
+        <activity android:name=".features.show_products.ShowProductsActivity" />
+        <activity android:name=".features.create_product.CreateProductActivity" />
+        <activity android:name=".features.show_categories.ShowCategoriesActivity" />
     </application>
 
 </manifest>
