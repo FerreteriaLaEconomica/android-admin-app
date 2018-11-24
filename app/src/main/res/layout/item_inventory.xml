@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="start|center_vertical"
+    android:minHeight="@dimen/simplelist_height"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="@dimen/simplelist_icon"
+        android:layout_height="@dimen/simplelist_icon"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginEnd="@dimen/simplelist_icon_margin"
+        android:layout_marginRight="@dimen/simplelist_icon_margin"
+        android:scaleType="fitXY"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp">
+
+        <LinearLayout
+            android:id="@+id/topBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/productNameTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="@dimen/simplelist_textsize" />
+
+            <TextView
+                android:id="@+id/precioTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textSize="16sp"
+                android:textColor="?android:attr/textColorTertiary" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/topBlock"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/cantidadTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorTertiary"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/formatoTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_toRightOf="@id/cantidadTV"
+                android:layout_toEndOf="@id/cantidadTV"
+                android:textSize="14sp"
+                android:textColor="?android:attr/textColorTertiary" />
+
+            <TextView
+                android:id="@+id/codigoBarrasTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textColor="?android:attr/textColorSecondary"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

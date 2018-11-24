@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <id name="item_product">111</id>
+    <id name="item_category">222</id>
+    <id name="item_inventory">333</id>
+</resources>

@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -17,10 +20,15 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.smontiel.ferretera.admin.Injector;
 import com.smontiel.ferretera.admin.R;
-import com.smontiel.ferretera.admin.data.User;
+import com.smontiel.ferretera.admin.data.models.Sucursal;
+import com.smontiel.ferretera.admin.data.models.User;
+import com.smontiel.ferretera.admin.features.create_sucursal.CreateSucursalActivity;
+import com.smontiel.ferretera.admin.features.show_categories.ShowCategoriesActivity;
+import com.smontiel.ferretera.admin.features.show_products.ShowProductsActivity;
 import com.smontiel.ferretera.admin.utils.ActivityUtils;
 
 import java.util.ArrayList;
@@ -51,8 +59,9 @@ public class DashboardActivity extends AppCompatActivity {
     private DashboardPresenter presenter;
     Drawer drawer;
     private Toolbar toolbar;
-    private String nombre, apellidos, email;
-    private boolean isSuperAdmin;
+    User currentUser;
+
+    private AlertDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,10 +72,11 @@ public class DashboardActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Bundle bundle = getIntent().getExtras();
-        nombre = bundle.getString(KEY_NOMBRE);
-        apellidos = bundle.getString(KEY_APELLIDOS);
-        email = bundle.getString(KEY_EMAIL);
-        isSuperAdmin = bundle.getBoolean(KEY_IS_SUPER_ADMIN);
+        String nombre = bundle.getString(KEY_NOMBRE);
+        String apellidos = bundle.getString(KEY_APELLIDOS);
+        String email = bundle.getString(KEY_EMAIL);
+        boolean isSuperAdmin = bundle.getBoolean(KEY_IS_SUPER_ADMIN);
+        currentUser = new User(nombre, apellidos, email, "", "", isSuperAdmin);
 
         DashboardFragment dashboardFragment = (DashboardFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.contentFrame);
@@ -76,8 +86,15 @@ public class DashboardActivity extends AppCompatActivity {
                     dashboardFragment, R.id.contentFrame);
         }
 
-        presenter = new DashboardPresenter(dashboardFragment,
-                Injector.provideSharedPrefs());
+        presenter = new DashboardPresenter(dashboardFragment, Injector.provideAuthClient(),
+                Injector.provideApiClient(), Injector.provideSharedPrefs());
+
+        progressDialog = new AlertDialog.Builder(this)
+                .setTitle("Cargando datos...")
+                .setCancelable(false)
+                .setView(new ProgressBar(this))
+                .create();
+        progressDialog.show();
     }
 
     @Override
@@ -89,32 +106,42 @@ public class DashboardActivity extends AppCompatActivity {
                 .withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withAccountHeader(getAccountHeader())
-                .withDrawerItems(drawerItems())
                 .withSelectedItemByPosition(-1)
                 .withCloseOnClick(true)
                 .build();
     }
 
-    private List<IDrawerItem> drawerItems() {
+    void updateDrawerItems(List<Sucursal> sucursales) {
+        progressDialog.dismiss();
         List<IDrawerItem> items = new ArrayList<>();
-        if (isSuperAdmin) {
+        for (Sucursal s : sucursales) {
             items.add(new PrimaryDrawerItem()
-                    .withName("Categorías")
-                    .withIcon(MaterialDesignIconic.Icon.gmi_collection_bookmark)
+                    .withIdentifier(s.id)
+                    .withName(s.nombre)
+                    .withIcon(GoogleMaterial.Icon.gmd_local_convenience_store)
+                    .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                        Toast.makeText(this, s.nombre, Toast.LENGTH_LONG).show();
+                        presenter.loadInventoryBySucursalId(s.id);
+                        getSupportActionBar().setSubtitle("Inventario en sucursal " + s.nombre);
+                        drawer.closeDrawer();
+                        return true;
+                    })
             );
         }
-        items.add(new PrimaryDrawerItem()
-                .withName("Sucursales")
-                .withIcon(GoogleMaterial.Icon.gmd_store_mall_directory)
-        );
-        if (isSuperAdmin) {
+        if (currentUser.isSuperAdmin) {
             items.add(new PrimaryDrawerItem()
-                    .withName("Productos")
-                    .withIcon(MaterialDesignIconic.Icon.gmi_apps)
+                    .withName("Agregar sucursal")
+                    .withIcon(CommunityMaterial.Icon2.cmd_plus)
+                    .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                        startActivity(CreateSucursalActivity.getStartIntent(this));
+                        drawer.closeDrawer();
+                        return true;
+                    })
             );
         }
-        items.add(new DividerDrawerItem());
-        items.add(new PrimaryDrawerItem()
+        drawer.removeAllItems();
+        drawer.addItems(drawerItems(items).toArray(new IDrawerItem[0]));
+        drawer.addStickyFooterItem(new PrimaryDrawerItem()
                 .withName("Cerrar sesión")
                 .withIcon(GoogleMaterial.Icon.gmd_exit_to_app)
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
@@ -122,8 +149,34 @@ public class DashboardActivity extends AppCompatActivity {
                     presenter.logOut();
                     finish();
                     return true;
-                })
-        );
+                }));
+        if (sucursales.size() > 0) drawer.setSelection(sucursales.get(0).id, true);
+    }
+
+    private List<IDrawerItem> drawerItems(List<IDrawerItem> sucursalItems) {
+        List<IDrawerItem> items = new ArrayList<>();
+        items.add(new SectionDrawerItem().withName("Sucursales"));
+        items.addAll(sucursalItems);
+        if (currentUser.isSuperAdmin) {
+            items.add(new SectionDrawerItem().withName("Super Admin"));
+            items.add(new PrimaryDrawerItem()
+                    .withName("Categorías")
+                    .withIcon(MaterialDesignIconic.Icon.gmi_collection_bookmark)
+                    .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                        startActivity(ShowCategoriesActivity.getStartIntent(DashboardActivity.this));
+                        return false;
+                    })
+            );
+            items.add(new PrimaryDrawerItem()
+                    .withName("Productos")
+                    .withIcon(MaterialDesignIconic.Icon.gmi_apps)
+                    .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                        startActivity(ShowProductsActivity.getStartIntent(DashboardActivity.this));
+                        return false;
+                    })
+            );
+        }
+        items.add(new DividerDrawerItem());
         return items;
     }
 
@@ -132,10 +185,16 @@ public class DashboardActivity extends AppCompatActivity {
                 .withActivity(this)
                 .addProfiles(new ProfileDrawerItem()
                         .withIcon(R.drawable.profile)
-                        .withName(nombre + " " + apellidos)
-                        .withEmail(email))
+                        .withName(currentUser.nombre + " " + currentUser.apellidos)
+                        .withEmail(currentUser.email))
                 .withHeaderBackground(R.drawable.header)
                 .withSelectionListEnabledForSingleProfile(false)
                 .build();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
     }
 }

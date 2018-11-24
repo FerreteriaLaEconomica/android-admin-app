@@ -3,6 +3,8 @@ package com.smontiel.ferretera.admin;
 import android.app.Application;
 import android.content.Context;
 
+import timber.log.Timber;
+
 /**
  * Created by Salvador Montiel on 29/10/18.
  */
@@ -14,6 +16,7 @@ public class MyApp extends Application {
         super.onCreate();
 
         this.context = this.getApplicationContext();
+        Timber.plant(new Timber.DebugTree());
     }
 
     public static Context getContext() {

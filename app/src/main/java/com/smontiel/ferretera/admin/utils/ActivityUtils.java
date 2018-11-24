@@ -23,6 +23,14 @@ public final class ActivityUtils {
         transaction.commit();
     }
 
+    public static void replaceFragmentInActivity(@NonNull FragmentManager fragmentManager, @NonNull Fragment fragment, int frameId) {
+        checkNotNull(fragmentManager);
+        checkNotNull(fragment);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(frameId, fragment);
+        transaction.commit();
+    }
+
     private ActivityUtils() {
         throw new RuntimeException("Can not be instantiated");
     }
