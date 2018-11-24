@@ -16,12 +16,20 @@ public interface DashboardContract {
 
         void showInfoDialog(String message);
 
+        void updatedInventorySuccessfully();
+
+        void showInventory(List<InventarioItem> inventarioItems);
+
         void showSucursales(List<Sucursal> sucursales);
 
         boolean isActive();
     }
 
     interface Presenter extends BasePresenter {
+
+        void loadInventoryBySucursalId(int id);
+
+        void updateInventory(int idSucursal, int idProduct, int quantity);
 
         void logOut();
     }

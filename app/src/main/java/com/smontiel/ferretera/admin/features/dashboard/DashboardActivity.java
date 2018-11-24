@@ -87,7 +87,7 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
         presenter = new DashboardPresenter(dashboardFragment, Injector.provideAuthClient(),
-                Injector.provideSharedPrefs());
+                Injector.provideApiClient(), Injector.provideSharedPrefs());
 
         progressDialog = new AlertDialog.Builder(this)
                 .setTitle("Cargando datos...")
@@ -121,6 +121,8 @@ public class DashboardActivity extends AppCompatActivity {
                     .withIcon(GoogleMaterial.Icon.gmd_local_convenience_store)
                     .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                         Toast.makeText(this, s.nombre, Toast.LENGTH_LONG).show();
+                        presenter.loadInventoryBySucursalId(s.id);
+                        getSupportActionBar().setSubtitle("Inventario en sucursal " + s.nombre);
                         drawer.closeDrawer();
                         return true;
                     })

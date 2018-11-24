@@ -1,6 +1,7 @@
 package com.smontiel.ferretera.admin.data.network;
 
 import com.smontiel.ferretera.admin.data.models.Categoria;
+import com.smontiel.ferretera.admin.data.models.Inventario;
 import com.smontiel.ferretera.admin.data.models.Producto;
 import com.smontiel.ferretera.admin.data.models.Sucursal;
 import com.smontiel.ferretera.admin.data.models.SucursalRequest;
@@ -40,4 +41,12 @@ public interface ApiClient {
 
     @POST("/sucursales")
     Maybe<Response<Sucursal>> createSucursal(@Body SucursalRequest body);
+
+    @GET("/sucursales/{id}/productos")
+    Maybe<Response<List<Inventario>>> getInventarioBySucursal(@Path("id") int id);
+
+    @PUT("/sucursales/{idSucursal}/productos/{idProduct}")
+    Maybe<Response<Inventario>> updateInventory(@Path("idSucursal") int idSucursal,
+                                                @Path("idProduct") int idProduct,
+                                                @Body Map<String, Object> body);
 }

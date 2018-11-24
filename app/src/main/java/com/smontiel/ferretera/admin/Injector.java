@@ -41,7 +41,8 @@ public class Injector {
         RxJava2CallAdapterFactory callAdapterFactory = RxJava2CallAdapterFactory
                 .createWithScheduler(Schedulers.io());
         return new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080")
+                //.baseUrl("http://10.0.2.2:8080")
+                .baseUrl("https://ferreteria-api-staging.herokuapp.com")
                 .client(provideOkHttpClient())
                 .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(GsonConverterFactory.create(provideGson()))
