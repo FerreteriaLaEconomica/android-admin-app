@@ -2,6 +2,8 @@ package com.smontiel.ferretera.admin.data.network;
 
 import com.smontiel.ferretera.admin.data.models.Categoria;
 import com.smontiel.ferretera.admin.data.models.Producto;
+import com.smontiel.ferretera.admin.data.models.Sucursal;
+import com.smontiel.ferretera.admin.data.models.SucursalRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -29,4 +31,7 @@ public interface ApiClient {
 
     @POST("/categorias")
     Maybe<Response<Categoria>> createCategory(@Body Map<String, Object> body);
+
+    @POST("/sucursales")
+    Maybe<Response<Sucursal>> createSucursal(@Body SucursalRequest body);
 }

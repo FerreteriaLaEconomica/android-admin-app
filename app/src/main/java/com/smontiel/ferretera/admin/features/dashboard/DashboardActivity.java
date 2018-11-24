@@ -27,6 +27,7 @@ import com.smontiel.ferretera.admin.Injector;
 import com.smontiel.ferretera.admin.R;
 import com.smontiel.ferretera.admin.data.models.Sucursal;
 import com.smontiel.ferretera.admin.data.models.User;
+import com.smontiel.ferretera.admin.features.create_sucursal.CreateSucursalActivity;
 import com.smontiel.ferretera.admin.features.show_categories.ShowCategoriesActivity;
 import com.smontiel.ferretera.admin.features.show_products.ShowProductsActivity;
 import com.smontiel.ferretera.admin.utils.ActivityUtils;
@@ -130,7 +131,7 @@ public class DashboardActivity extends AppCompatActivity {
                 .withName("Agregar sucursal")
                 .withIcon(CommunityMaterial.Icon2.cmd_plus)
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    Toast.makeText(this, "Agregar sucursal", Toast.LENGTH_LONG).show();
+                    startActivity(CreateSucursalActivity.getStartIntent(this));
                     drawer.closeDrawer();
                     return true;
                 })

@@ -5,4 +5,5 @@
     <string name="categories">Categorías</string>
     <string name="products">Productos</string>
     <string name="add_product">Agregar producto</string>
+    <string name="add_sucursal">Agregar sucursal</string>
 </resources>

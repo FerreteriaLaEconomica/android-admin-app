@@ -69,22 +69,12 @@ public class ShowCategoriesActivity extends AppCompatActivity implements ShowCat
             new MaterialDialog.Builder(this)
                     .title("Agregar categoría")
                     .inputType(InputType.TYPE_CLASS_TEXT)
-                    .input("Nombre", "", (dialog, input) -> {
-                        if (input.length() == 0) dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
-                        else dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
-                    })
+                    .inputRange(3, 50)
+                    .input("Nombre", "", false, (dialog, input) -> {})
                     .positiveText("Agregar")
                     .onPositive((dialog, which) -> presenter.createCategory(dialog.getInputEditText().getText().toString()))
                     .negativeText("Cancelar")
                     .show();
-            /*new AlertDialog.Builder(this)
-                    .setCancelable(true)
-                    .setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_error)
-                            .colorRes(android.R.color.black))
-                    .setTitle("Ocurrió un error!")
-                    .setView(new CustomEditText(this, null))
-                    .setPositiveButton("Guardar", null)
-                    .show();*/
         });
 
         progressBar = findViewById(R.id.progress_bar);
