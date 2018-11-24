@@ -14,6 +14,9 @@ import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by Salvador Montiel on 4/11/18.
@@ -25,6 +28,9 @@ public interface ApiClient {
 
     @POST("/productos")
     Maybe<Producto> createProduct(@Body Producto producto);
+
+    @PUT("/productos/{id}")
+    Maybe<Producto> updateProduct(@Path("id") int id, @Body Producto producto);
 
     @GET("/categorias")
     Maybe<Response<List<Categoria>>> getAllCategories();

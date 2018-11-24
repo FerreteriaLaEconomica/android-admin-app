@@ -19,7 +19,7 @@ import java.util.List;
  * Created by Salvador Montiel on 4/11/18.
  */
 public class ProductItem extends AbstractItem<ProductItem, ProductItem.ViewHolder> {
-    private Producto product;
+    public final Producto product;
 
     public ProductItem(Producto product) {
         this.product = product;
@@ -37,8 +37,9 @@ public class ProductItem extends AbstractItem<ProductItem, ProductItem.ViewHolde
                 .into(holder.icon);
         holder.name.setText(product.nombre);
         holder.codigoBarras.setText("Codigo barras: " + product.codigoBarras);
-        holder.formato.setText(product.formato);
+        holder.formato.setText("");
         holder.categoria.setText(product.categoria);
+        holder.precio.setText("$ " + product.precioVenta);
     }
 
     @NonNull
@@ -63,6 +64,7 @@ public class ProductItem extends AbstractItem<ProductItem, ProductItem.ViewHolde
         private TextView codigoBarras;
         private TextView formato;
         private TextView categoria;
+        private TextView precio;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -71,6 +73,7 @@ public class ProductItem extends AbstractItem<ProductItem, ProductItem.ViewHolde
             codigoBarras = itemView.findViewById(R.id.codigoBarrasTV);
             formato = itemView.findViewById(R.id.formatoTV);
             categoria = itemView.findViewById(R.id.categoriaTV);
+            precio = itemView.findViewById(R.id.precioTV);
         }
     }
 }

@@ -51,10 +51,8 @@ public class RxImageView extends AppCompatImageView {
         super.setImageDrawable(drawable);
         Drawable resDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_launcher_background);
 
-        if (!(drawable.getConstantState().equals(resDrawable.getConstantState()))){
-            if(publishSubject != null)
-                publishSubject.onNext(true);
-        }
+        if(publishSubject != null)
+            publishSubject.onNext(true);
     }
 
     @Override

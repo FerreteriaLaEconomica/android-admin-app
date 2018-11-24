@@ -26,14 +26,14 @@ public class Producto {
     @SerializedName("precio_venta") @Expose
     public double precioVenta;
     @SerializedName("porcentaje_descuento") @Expose
-    public double descuento;
+    public int descuento;
 
     /**
      * No args constructor for use in serialization
      */
     public Producto() {}
 
-    public Producto(int id, String codigoBarras, String nombre, String descripcion, String urlFoto, String formato, String categoria, double precioVenta, double descuento) {
+    public Producto(int id, String codigoBarras, String nombre, String descripcion, String urlFoto, String formato, String categoria, double precioVenta, int descuento) {
         this.id = id;
         this.codigoBarras = codigoBarras;
         this.nombre = nombre;

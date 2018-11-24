@@ -3,6 +3,7 @@ package com.smontiel.ferretera.admin.features.show_products;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -14,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.smontiel.ferretera.admin.Injector;
@@ -62,6 +65,10 @@ public class ShowProductsActivity extends AppCompatActivity implements ShowProdu
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(itemAdapter);
+        itemAdapter.withOnClickListener((v, adapter, item, position) -> {
+            startActivity(CreateProductActivity.getStartIntent(this, item.product));
+            return true;
+        });
         noProductsView = findViewById(R.id.no_products);
         // Set up progress indicator
         swipeRefreshLayout = findViewById(R.id.refresh_layout);

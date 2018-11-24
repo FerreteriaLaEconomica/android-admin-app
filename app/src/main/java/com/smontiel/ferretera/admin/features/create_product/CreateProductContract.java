@@ -29,5 +29,8 @@ public interface CreateProductContract {
 
         void createProducto(String codigoBarras, String nombre, String descripcion, String formato,
                             String categoria, File image, double precio, int descuento);
+
+        void updateProducto(int id, String codigoBarras, String nombre, String descripcion, String formato,
+                            String categoria, String urlImage, double precio, int descuento);
     }
 }

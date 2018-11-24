@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
@@ -36,6 +38,7 @@ import com.smontiel.ferretera.admin.Injector;
 import com.smontiel.ferretera.admin.R;
 import com.smontiel.ferretera.admin.base.RxImageView;
 import com.smontiel.ferretera.admin.data.models.Categoria;
+import com.smontiel.ferretera.admin.data.models.Producto;
 import com.smontiel.ferretera.admin.utils.CustomEditText;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -57,8 +60,32 @@ import io.reactivex.functions.Function3;
 import static com.smontiel.ferretera.admin.utils.Preconditions.checkNotNull;
 
 public class CreateProductActivity extends AppCompatActivity implements CreateProductContract.View {
+    private static final String PRODUCT_ID = "PRODUCT_ID";
+    private static final String PRODUCT_NAME = "PRODUCT_NAME";
+    private static final String PRODUCT_BARCODE = "PRODUCT_BARCODE";
+    private static final String PRODUCT_DESCRIPTION = "PRODUCT_DESCRIPTION";
+    private static final String PRODUCT_URL_PHOTO = "PRODUCT_URL_PHOTO";
+    private static final String PRODUCT_FORMAT = "PRODUCT_FORMAT";
+    private static final String PRODUCT_CATEGORY = "PRODUCT_CATEGORY";
+    private static final String PRODUCT_PRICE = "PRODUCT_PRICE";
+    private static final String PRODUCT_DISCOUNT = "PRODUCT_DISCOUNT";
+
     public static Intent getStartIntent(Context activity) {
         return new Intent(activity, CreateProductActivity.class);
+    }
+
+    public static Intent getStartIntent(Context activity, Producto producto) {
+        Intent i = new Intent(activity, CreateProductActivity.class);
+        i.putExtra(PRODUCT_ID, producto.id);
+        i.putExtra(PRODUCT_NAME, producto.nombre);
+        i.putExtra(PRODUCT_BARCODE, producto.codigoBarras);
+        i.putExtra(PRODUCT_DESCRIPTION, producto.descripcion);
+        i.putExtra(PRODUCT_URL_PHOTO, producto.urlFoto);
+        i.putExtra(PRODUCT_FORMAT, producto.formato);
+        i.putExtra(PRODUCT_CATEGORY, producto.categoria);
+        i.putExtra(PRODUCT_PRICE, producto.precioVenta);
+        i.putExtra(PRODUCT_DISCOUNT, producto.descuento);
+        return i;
     }
 
     private CreateProductContract.Presenter presenter = new CreateProductPresenter(
@@ -75,12 +102,26 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
     private String categoria = "";
 
     private Disposable disposable;
+    private Producto producto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_product);
 
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            int id = b.getInt(PRODUCT_ID);
+            String nombre = b.getString(PRODUCT_NAME);
+            String barcode = b.getString(PRODUCT_BARCODE);
+            String descripcion = b.getString(PRODUCT_DESCRIPTION);
+            String urlFoto = b.getString(PRODUCT_URL_PHOTO);
+            String formato = b.getString(PRODUCT_FORMAT);
+            String categoria = b.getString(PRODUCT_CATEGORY);
+            double precio = b.getDouble(PRODUCT_PRICE);
+            int descuento = b.getInt(PRODUCT_DISCOUNT);
+            producto = new Producto(id, barcode, nombre, descripcion, urlFoto, formato, categoria, precio, descuento);
+        }
         requestPermissions();
         initializeViews();
         progressDialog = new ProgressDialog(this);
@@ -142,7 +183,7 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
                     return result;
                 });
 
-        Observable.combineLatest(nombreObservable, codigoBarrasObservable, descripcionObservable, precioObservable, descuentoObservable, imagenIV.getPublishSubject(),
+        disposable = Observable.combineLatest(nombreObservable, codigoBarrasObservable, descripcionObservable, precioObservable, descuentoObservable, imagenIV.getPublishSubject(),
                 (s, s2, s3, s4, s5, s6) -> s6)
                 .filter(isImageSet -> isImageSet)
                 .subscribe(objects -> fab.setEnabled(true));
@@ -150,7 +191,8 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
 
     private void initializeViews() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.add_product);
+        if (producto != null) toolbar.setTitle(R.string.edit_product);
+        else toolbar.setTitle(R.string.add_product);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -161,8 +203,13 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
         fab.setOnClickListener(view -> {
             double precio = Double.valueOf(precioET.getText());
             int descuento = Integer.valueOf(descuentoET.getText());
-            presenter.createProducto(codigoBarrasET.getText(), nombreET.getText(),
-                    descripcionET.getText(), formato, categoria, imageFile, precio, descuento);
+            if (producto != null) {
+                presenter.updateProducto(producto.id, codigoBarrasET.getText(), nombreET.getText(),
+                        descripcionET.getText(), formato, categoria, producto.urlFoto, precio, descuento);
+            } else {
+                presenter.createProducto(codigoBarrasET.getText(), nombreET.getText(),
+                        descripcionET.getText(), formato, categoria, imageFile, precio, descuento);
+            }
         });
         fab.setEnabled(false);
 
@@ -172,22 +219,39 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
                 .colorRes(R.color.md_white_1000));
 
         nombreET = findViewById(R.id.nombreET);
+        if (producto != null) nombreET.getEditText().setText(producto.nombre);
         codigoBarrasET = findViewById(R.id.codigoBarrasET);
+        if (producto != null) codigoBarrasET.getEditText().setText(producto.codigoBarras);
         descripcionET = findViewById(R.id.descripcionET);
+        if (producto != null) descripcionET.getEditText().setText(producto.descripcion);
         precioET = findViewById(R.id.precioET);
-        precioET.getEditText().setText("0.00");
+        if (producto != null) precioET.getEditText().setText(producto.precioVenta + "");
+        else precioET.getEditText().setText("0.00");
         descuentoET = findViewById(R.id.descuentoET);
-        descuentoET.getEditText().setText(0 + "");
+        if (producto != null) descuentoET.getEditText().setText(producto.descuento + "");
+        else descuentoET.getEditText().setText(0 + "");
 
         categoriaSpinner = findViewById(R.id.categoriaSpinner);
         categoriaSpinner.setOnItemSelectedListener((view, position, id, item) -> categoria = item.toString());
 
         formatoSpinner = findViewById(R.id.formatoSpinner);
-        formatoSpinner.setItems("PIEZA", "KILOGRAMO");
+        List<String> formatos = Arrays.asList("PIEZA", "KILOGRAMO");
+        formatoSpinner.setItems(formatos);
         formatoSpinner.setOnItemSelectedListener((view, position, id, item) -> formato = item.toString());
-        formato = formatoSpinner.getItems().get(0).toString();
+        if (producto != null) {
+            int index = formatos.indexOf(producto.formato);
+            formatoSpinner.setSelectedIndex(index);
+            formato = formatos.get(index);
+        }
+        else formato = formatoSpinner.getItems().get(0).toString();
 
         imagenIV = findViewById(R.id.imagenIV);
+        if (producto != null) {
+            Glide.with(this)
+                    .load(producto.urlFoto)
+                    .error(R.mipmap.ic_launcher_round)
+                    .into(imagenIV);
+        }
         imagenIV.setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -264,10 +328,14 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
 
     @Override
     public void onSaveSucces() {
-        nombreET.getEditText().setText("");
-        codigoBarrasET.getEditText().setText("");
-        descripcionET.getEditText().setText("");
-        imagenIV.setImageURI(null);
+        if (producto == null) {
+            nombreET.getEditText().setText("");
+            codigoBarrasET.getEditText().setText("");
+            descripcionET.getEditText().setText("");
+            imagenIV.setImageURI(null);
+            precioET.getEditText().setText("0.00");
+            descuentoET.getEditText().setText("0");
+        }
         Toast.makeText(this, "Producto guardado exitosamente", Toast.LENGTH_LONG).show();
     }
 
@@ -281,7 +349,12 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
         List<String> names = new ArrayList<>(categorias.size());
         for (Categoria c : categorias) names.add(c.nombre);
         categoriaSpinner.setItems(names);
-        categoria = names.get(0);
+        if (producto != null) {
+            int index = names.indexOf(producto.categoria);
+            categoriaSpinner.setSelectedIndex(index);
+            categoria = names.get(index);
+        }
+        else categoria = names.get(0);
     }
 
     @Override

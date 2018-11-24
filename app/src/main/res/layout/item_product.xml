@@ -24,18 +24,35 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp">
 
-        <TextView
-            android:id="@+id/productNameTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="@dimen/simplelist_textsize" />
+        <LinearLayout
+            android:id="@+id/topBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/productNameTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="@dimen/simplelist_textsize" />
+
+            <TextView
+                android:id="@+id/precioTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textSize="16sp"
+                android:textColor="?android:attr/textColorTertiary" />
+
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/productNameTV"
+            android:layout_below="@id/topBlock"
             android:layout_marginTop="5dp">
 
             <TextView

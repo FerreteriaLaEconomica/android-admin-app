@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -127,15 +126,17 @@ public class DashboardActivity extends AppCompatActivity {
                     })
             );
         }
-        items.add(new PrimaryDrawerItem()
-                .withName("Agregar sucursal")
-                .withIcon(CommunityMaterial.Icon2.cmd_plus)
-                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    startActivity(CreateSucursalActivity.getStartIntent(this));
-                    drawer.closeDrawer();
-                    return true;
-                })
-        );
+        if (currentUser.isSuperAdmin) {
+            items.add(new PrimaryDrawerItem()
+                    .withName("Agregar sucursal")
+                    .withIcon(CommunityMaterial.Icon2.cmd_plus)
+                    .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                        startActivity(CreateSucursalActivity.getStartIntent(this));
+                        drawer.closeDrawer();
+                        return true;
+                    })
+            );
+        }
         drawer.removeAllItems();
         drawer.addItems(drawerItems(items).toArray(new IDrawerItem[0]));
         drawer.addStickyFooterItem(new PrimaryDrawerItem()

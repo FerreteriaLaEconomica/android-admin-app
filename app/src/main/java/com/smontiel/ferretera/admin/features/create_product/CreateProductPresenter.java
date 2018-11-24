@@ -65,6 +65,26 @@ public class CreateProductPresenter implements CreateProductContract.Presenter {
     }
 
     @Override
+    public void updateProducto(int id, String codigoBarras, String nombre, String descripcion,
+                               String formato, String categoria, String urlImage, double precio,
+                               int descuento) {
+        view.setLoadingIndicator(true);
+        Producto p = new Producto(id, codigoBarras, nombre, descripcion, urlImage, formato, categoria, precio, descuento);
+        Disposable disposable = apiClient.updateProduct(id, p)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(product -> {
+                    Timber.d(product.toString());
+                    view.setLoadingIndicator(false);
+                    view.onSaveSucces();
+                }, throwable -> {
+                    Timber.e(throwable);
+                    Log.e("aA", throwable.toString());
+                    view.showError("Failure: " + throwable.getMessage());
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    @Override
     public void subscribe() {
         loadCategorias();
     }
