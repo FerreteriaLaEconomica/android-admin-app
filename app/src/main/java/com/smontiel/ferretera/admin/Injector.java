@@ -42,7 +42,7 @@ public class Injector {
                 .createWithScheduler(Schedulers.io());
         return new Retrofit.Builder()
                 //.baseUrl("http://10.0.2.2:8080")
-                .baseUrl("https://ferreteria-api-staging.herokuapp.com")
+                .baseUrl("https://api.salvadormontiel.com")
                 .client(provideOkHttpClient())
                 .addCallAdapterFactory(callAdapterFactory)
                 .addConverterFactory(GsonConverterFactory.create(provideGson()))

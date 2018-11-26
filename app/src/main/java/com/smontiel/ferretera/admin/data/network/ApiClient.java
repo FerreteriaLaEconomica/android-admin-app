@@ -39,6 +39,9 @@ public interface ApiClient {
     @POST("/categorias")
     Maybe<Response<Categoria>> createCategory(@Body Map<String, Object> body);
 
+    @GET("/sucursales/{id}")
+    Maybe<Response<Sucursal>> getSucursalById(@Path("id") int id);
+
     @POST("/sucursales")
     Maybe<Response<Sucursal>> createSucursal(@Body SucursalRequest body);
 
