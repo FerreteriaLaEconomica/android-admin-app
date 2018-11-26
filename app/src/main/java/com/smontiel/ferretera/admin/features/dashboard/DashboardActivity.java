@@ -120,7 +120,6 @@ public class DashboardActivity extends AppCompatActivity {
                     .withName(s.nombre)
                     .withIcon(GoogleMaterial.Icon.gmd_local_convenience_store)
                     .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                        Toast.makeText(this, s.nombre, Toast.LENGTH_LONG).show();
                         presenter.loadInventoryBySucursalId(s.id);
                         getSupportActionBar().setSubtitle("Inventario en sucursal " + s.nombre);
                         drawer.closeDrawer();

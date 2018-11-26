@@ -7,4 +7,5 @@
     <string name="add_product">Agregar producto</string>
     <string name="edit_product">Editar producto</string>
     <string name="add_sucursal">Agregar sucursal</string>
+    <string name="title_activity_update_inventory">Actualizar inventario</string>
 </resources>
