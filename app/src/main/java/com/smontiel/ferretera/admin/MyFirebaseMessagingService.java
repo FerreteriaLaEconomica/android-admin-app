@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -36,9 +37,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         String body = remoteMessage.getNotification().getBody();
         Type type = new TypeToken<Map<String, String>>(){}.getType();
-        Inventario inventario = Injector.provideGson().fromJson(body, Inventario.class);
-
-        apiClient.getSucursalById(inventario.idSucursal)
+        Map<String, String> inventario = Injector.provideGson().fromJson(body, type);
+        Log.e("aA", inventario.toString());
+        apiClient.getSucursalById(Integer.valueOf(inventario.get("id_sucursal")))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.isSuccessful())
@@ -46,7 +47,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }, Timber::e);
     }
 
-    private void showNotification(String title, Inventario inventario, Sucursal sucursal) {
+    private void showNotification(String title, Map<String, String> inventario, Sucursal sucursal) {
         Intent notifyIntent = UpdateInventoryActivity.getStartIntent(this, inventario, sucursal);
         // Set the Activity to start in a new, empty task
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -54,7 +55,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent notifyPendingIntent = PendingIntent.getActivity(
                 this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
         );
-        String contentText = "Sólo quedan " + inventario.cantidad + " unidades de " + inventario.producto.nombre
+        String contentText = "Sólo quedan " + inventario.get("cantidad") + " unidades de " + inventario.get("nombre")
                 + " en la sucursal " + sucursal.nombre + ".";
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "channel_id")

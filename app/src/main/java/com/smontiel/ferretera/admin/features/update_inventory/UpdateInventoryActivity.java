@@ -51,18 +51,18 @@ public class UpdateInventoryActivity extends AppCompatActivity {
     private static final String SUCURSAL_ID = "SUCURSAL_ID";
     private static final String SUCURSAL_NAME = "SUCURSAL_NAME";
 
-    public static Intent getStartIntent(Context activity, Inventario inventario, Sucursal sucursal) {
+    public static Intent getStartIntent(Context activity, Map<String, String> inventario, Sucursal sucursal) {
         Intent i = new Intent(activity, UpdateInventoryActivity.class);
-        i.putExtra(PRODUCT_ID, inventario.producto.id);
-        i.putExtra(PRODUCT_NAME, inventario.producto.nombre);
-        i.putExtra(PRODUCT_BARCODE, inventario.producto.codigoBarras);
-        i.putExtra(PRODUCT_DESCRIPTION, inventario.producto.descripcion);
-        i.putExtra(PRODUCT_URL_PHOTO, inventario.producto.urlFoto);
-        i.putExtra(PRODUCT_FORMAT, inventario.producto.formato);
-        i.putExtra(PRODUCT_CATEGORY, inventario.producto.categoria);
-        i.putExtra(PRODUCT_PRICE, inventario.producto.precioVenta);
-        i.putExtra(PRODUCT_DISCOUNT, inventario.producto.descuento);
-        i.putExtra(PRODUCT_QUANTITY, inventario.cantidad);
+        i.putExtra(PRODUCT_ID, Integer.valueOf(inventario.get("id_producto")));
+        i.putExtra(PRODUCT_NAME, inventario.get("nombre"));
+        i.putExtra(PRODUCT_BARCODE, inventario.get("codigo_barras"));
+        i.putExtra(PRODUCT_DESCRIPTION, inventario.get("descripcion"));
+        i.putExtra(PRODUCT_URL_PHOTO, inventario.get("url_foto"));
+        i.putExtra(PRODUCT_FORMAT, inventario.get("formato"));
+        i.putExtra(PRODUCT_CATEGORY, inventario.get("categoria"));
+        i.putExtra(PRODUCT_PRICE, Double.valueOf(inventario.get("precio_venta")));
+        i.putExtra(PRODUCT_DISCOUNT, Integer.valueOf(inventario.get("porcentaje_descuento")));
+        i.putExtra(PRODUCT_QUANTITY, Integer.valueOf(inventario.get("cantidad")));
         i.putExtra(SUCURSAL_ID, sucursal.id);
         i.putExtra(SUCURSAL_NAME, sucursal.nombre);
         return i;
@@ -138,9 +138,9 @@ public class UpdateInventoryActivity extends AppCompatActivity {
         descuentoTV = findViewById(R.id.descuentoTV);
         descuentoTV.setText("Descuento: \n" + b.getInt(PRODUCT_DISCOUNT));
         formatoTV = findViewById(R.id.formatoTV);
-        formatoTV.setText("Formato: \n" + b.getString(PRODUCT_DISCOUNT));
+        formatoTV.setText("Formato: \n" + b.getString(PRODUCT_FORMAT));
         categoriaTV = findViewById(R.id.categoriaTV);
-        categoriaTV.setText("Categoría: \n" + b.getString(PRODUCT_DISCOUNT));
+        categoriaTV.setText("Categoría: \n" + b.getString(PRODUCT_CATEGORY));
 
         progressBar = findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);

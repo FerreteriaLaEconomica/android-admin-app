@@ -1,5 +1,6 @@
 package com.smontiel.ferretera.admin.features.dashboard;
 
+import android.app.ActivityManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -27,6 +30,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static com.smontiel.ferretera.admin.utils.Preconditions.checkNotNull;
 
 /**
@@ -75,15 +79,29 @@ public class DashboardFragment extends Fragment implements DashboardContract.Vie
                     .show();
             return true;
         });
+        itemAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<InventarioItem>() {
+            @Override
+            public boolean filter(InventarioItem item, @Nullable CharSequence constraint) {
+                String filter = constraint.toString().toLowerCase();
+                return item.inventario.producto.nombre.toLowerCase().contains(filter)
+                        || item.inventario.producto.categoria.toLowerCase().contains(filter)
+                        || item.inventario.producto.codigoBarras.toLowerCase().contains(filter)
+                        || item.inventario.producto.descripcion.toLowerCase().contains(filter);
+            }
+        });
         noProductsView = v.findViewById(R.id.no_products);
         progressBar = v.findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
     }
 
+    void filterItems(String constraint) {
+        itemAdapter.filter(constraint);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        presenter.subscribe();
+        if (itemAdapter.getItemCount() <= 0) presenter.subscribe();
     }
 
     @Override

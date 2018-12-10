@@ -35,8 +35,8 @@ public class SignupPresenter implements SignupContract.Presenter {
     }
 
     @Override
-    public void signUp(String nombre, String apellidos, String email, String password, String telefono) {
-        Maybe<Response<User>> call = authClient.signUp(new UserDto(nombre, apellidos, email, password, "", telefono));
+    public void signUp(String nombre, String apellidos, String email, String password, String direccion) {
+        Maybe<Response<User>> call = authClient.signUp(new UserDto(nombre, apellidos, email, password, "", "7891015869", direccion));
         Disposable disposable = call.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.isSuccessful()) {

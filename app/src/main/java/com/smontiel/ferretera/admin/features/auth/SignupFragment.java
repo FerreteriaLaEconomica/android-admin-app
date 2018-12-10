@@ -35,7 +35,7 @@ public class SignupFragment extends Fragment implements SignupContract.View {
 
     private SignupContract.Presenter presenter;
 
-    private CustomEditText nombreET, apellidosET, emailET, telefonoET, passwordET, passwordCheckET;
+    private CustomEditText nombreET, apellidosET, emailET, direccionET, passwordET, passwordCheckET;
     private FloatingActionButton fab;
     private ProgressDialog progressDialog;
 
@@ -64,7 +64,7 @@ public class SignupFragment extends Fragment implements SignupContract.View {
             if (NetworkUtils.isInternetAvailable(getActivity())) {
                 progressDialog.show();
                 presenter.signUp(nombreET.getText(), apellidosET.getText(), emailET.getText(),
-                        passwordET.getText(), telefonoET.getText());
+                        passwordET.getText(), direccionET.getText());
             }
             else showDialog("Sin conexión",
                     "No hay conexión a Internet. Por favor activa el Wi-Fi o los datos.",
@@ -132,22 +132,21 @@ public class SignupFragment extends Fragment implements SignupContract.View {
                     } else passwordCheckET.setError(null);
                     return result;
                 });
-        telefonoET = v.findViewById(R.id.telefonoET);
-        telefonoET.setCounterEnabled(true);
-        telefonoET.setCounterMaxLength(10);
-        Pattern telefonoPattern = Pattern.compile("\\d{10}");
-        Observable<String> telefonoObservable = RxTextView.textChanges(telefonoET.getEditText())
+        direccionET = v.findViewById(R.id.direccionET);
+        direccionET.setCounterEnabled(true);
+        direccionET.setCounterMaxLength(10);
+        Observable<String> direccionObservable = RxTextView.textChanges(direccionET.getEditText())
                 .map(CharSequence::toString)
                 .filter(text -> {
-                    boolean result = telefonoPattern.matcher(text).matches();
+                    boolean result = text.length() >= 3;
                     if (!result) {
-                        telefonoET.setError("Teléfono debe ser un número de 10 dígitos");
+                        direccionET.setError("La dirección debe tener al menos 3 caracteres");
                         fab.setEnabled(false);
-                    } else telefonoET.setError(null);
+                    } else direccionET.setError(null);
                     return result;
                 });
         disposable = Observable.combineLatest(nombreObservable, apellidosObservable, emailObservable,
-                passwordObservable, passwordCheckObservable, telefonoObservable,
+                passwordObservable, passwordCheckObservable, direccionObservable,
                 (s1, s2, s3, s4, s5, s6) -> Void.TYPE)
                 .subscribe(ignored -> fab.setEnabled(true));
     }
