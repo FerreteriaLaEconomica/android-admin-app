@@ -12,13 +12,14 @@ import android.util.AttributeSet;
 
 import com.smontiel.ferretera.admin.R;
 
+import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 
 /**
  * Created by Salvador Montiel on 15/11/18.
  */
 public class RxImageView extends AppCompatImageView {
-    private PublishSubject<Boolean> publishSubject = PublishSubject.create();
+    private BehaviorSubject<Boolean> publishSubject = BehaviorSubject.create();
 
     public RxImageView(Context context) {
         super(context);
@@ -62,7 +63,7 @@ public class RxImageView extends AppCompatImageView {
             publishSubject.onNext(true);
     }
 
-    public PublishSubject<Boolean> getPublishSubject() {
+    public BehaviorSubject<Boolean> getPublishSubject() {
         return publishSubject;
     }
 }

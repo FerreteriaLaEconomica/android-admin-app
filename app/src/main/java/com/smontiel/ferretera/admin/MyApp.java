@@ -3,6 +3,7 @@ package com.smontiel.ferretera.admin;
 import android.app.Application;
 import android.content.Context;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import timber.log.Timber;
@@ -19,6 +20,7 @@ public class MyApp extends Application {
 
         this.context = this.getApplicationContext();
         Timber.plant(new Timber.DebugTree());
+        FirebaseApp.initializeApp(this.getApplicationContext());
         FirebaseMessaging.getInstance().subscribeToTopic("inventario");
     }
 

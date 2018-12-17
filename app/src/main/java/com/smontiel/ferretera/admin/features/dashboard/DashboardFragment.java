@@ -94,6 +94,10 @@ public class DashboardFragment extends Fragment implements DashboardContract.Vie
         progressBar.setVisibility(View.GONE);
     }
 
+    int getItemCount() {
+        return itemAdapter.getItemCount();
+    }
+
     void filterItems(String constraint) {
         itemAdapter.filter(constraint);
     }

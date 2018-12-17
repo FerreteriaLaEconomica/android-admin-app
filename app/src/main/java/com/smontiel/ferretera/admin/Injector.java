@@ -9,6 +9,8 @@ import com.smontiel.ferretera.admin.data.SharedPrefs;
 import com.smontiel.ferretera.admin.data.network.ApiClient;
 import com.smontiel.ferretera.admin.data.network.AuthClient;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -41,6 +43,7 @@ public class Injector {
         RxJava2CallAdapterFactory callAdapterFactory = RxJava2CallAdapterFactory
                 .createWithScheduler(Schedulers.io());
         return new Retrofit.Builder()
+                //.baseUrl("http://192.168.43.173:8080")
                 //.baseUrl("http://10.0.2.2:8080")
                 .baseUrl("https://api.salvadormontiel.com")
                 .client(provideOkHttpClient())
@@ -51,6 +54,7 @@ public class Injector {
 
     private static OkHttpClient provideOkHttpClient() {
         OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder();
+        okhttpClientBuilder.connectTimeout(2, TimeUnit.SECONDS);
         okhttpClientBuilder.addInterceptor(chain -> {
             Request request = chain.request();
             SharedPrefs prefs = provideSharedPrefs();

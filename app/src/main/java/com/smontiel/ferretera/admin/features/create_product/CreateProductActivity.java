@@ -86,6 +86,7 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
     private ProgressDialog progressDialog;
     private RxImageView imagenIV;
     private CustomEditText nombreET, codigoBarrasET, descripcionET, precioET, descuentoET;
+    private Observable<String> nombreObservable, codigoBarrasObservable, descripcionObservable, precioObservable, descuentoObservable;
     private MaterialSpinner formatoSpinner, categoriaSpinner;
     private File imageFile;
     private String formato = "";
@@ -121,7 +122,7 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
     }
 
     private void initViewBindings() {
-        Observable<String> nombreObservable = RxTextView.textChanges(nombreET.getEditText())
+        nombreObservable = RxTextView.textChanges(nombreET.getEditText())
                 .map(CharSequence::toString)
                 .filter(charSequence -> {
                     boolean result = charSequence.length() > 3;
@@ -131,7 +132,7 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
                     } else nombreET.setError(null);
                     return result;
                 });
-        Observable<String> codigoBarrasObservable = RxTextView.textChanges(codigoBarrasET.getEditText())
+        codigoBarrasObservable = RxTextView.textChanges(codigoBarrasET.getEditText())
                 .map(CharSequence::toString)
                 .filter(charSequence -> {
                     boolean result = charSequence.length() > 1;
@@ -141,7 +142,7 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
                     } else codigoBarrasET.setError(null);
                     return result;
                 });
-        Observable<String> descripcionObservable = RxTextView.textChanges(descripcionET.getEditText())
+        descripcionObservable = RxTextView.textChanges(descripcionET.getEditText())
                 .map(CharSequence::toString)
                 .filter(charSequence -> {
                     boolean result = charSequence.length() > 1;
@@ -151,7 +152,7 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
                     } else descripcionET.setError(null);
                     return result;
                 });
-        Observable<String> precioObservable = RxTextView.textChanges(precioET.getEditText())
+        precioObservable = RxTextView.textChanges(precioET.getEditText())
                 .map(CharSequence::toString)
                 .filter(charSequence -> {
                     boolean result = charSequence.length() >= 1;
@@ -161,11 +162,11 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
                     } else precioET.setError(null);
                     return result;
                 });
-        Observable<String> descuentoObservable = RxTextView.textChanges(descuentoET.getEditText())
+        descuentoObservable = RxTextView.textChanges(descuentoET.getEditText())
                 .map(CharSequence::toString)
                 .filter(charSequence -> {
                     int num = charSequence.equals("") ? 0 :  Integer.valueOf(charSequence);
-                    boolean result = charSequence.length() >= 1 && num >= 0 && num <= 100;
+                    boolean result = num >= 0 && num <= 100;
                     if (!result) {
                         descuentoET.setError("Descuento debe tener 1 dígito al menos entre 0 - 100");
                         fab.setEnabled(false);
@@ -173,10 +174,21 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
                     return result;
                 });
 
-        disposable = Observable.combineLatest(nombreObservable, codigoBarrasObservable, descripcionObservable, precioObservable, descuentoObservable, imagenIV.getPublishSubject(),
-                (s, s2, s3, s4, s5, s6) -> s6)
-                .filter(isImageSet -> isImageSet)
-                .subscribe(objects -> fab.setEnabled(true));
+        if (producto == null) {
+            disposable = Observable.combineLatest(nombreObservable, codigoBarrasObservable, descripcionObservable, precioObservable, descuentoObservable, imagenIV.getPublishSubject(),
+                    (s, s2, s3, s4, s5, s6) -> s6)
+                    .filter(isImageSet -> imageFile != null)
+                    .subscribe(objects -> {
+                        fab.setEnabled(true);
+                    });
+        } else {
+            imagenIV.setEnabled(false);
+            disposable = Observable.combineLatest(nombreObservable, codigoBarrasObservable, descripcionObservable, precioObservable, descuentoObservable,
+                    (s, s2, s3, s4, s5) -> s5)
+                    .subscribe(objects -> {
+                        fab.setEnabled(true);
+                    });
+        }
     }
 
     private void initializeViews() {
@@ -357,7 +369,12 @@ public class CreateProductActivity extends AppCompatActivity implements CreatePr
     public void onPause() {
         super.onPause();
         presenter.unsubscribe();
+    }
+
+    @Override
+    protected void onDestroy() {
         if (disposable != null) disposable.dispose();
+        super.onDestroy();
     }
 
     private void showDialog(String title, String message, IIcon icon) {

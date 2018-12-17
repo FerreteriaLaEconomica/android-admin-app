@@ -41,6 +41,8 @@ import com.smontiel.ferretera.admin.Injector;
 import com.smontiel.ferretera.admin.R;
 import com.smontiel.ferretera.admin.data.models.Sucursal;
 import com.smontiel.ferretera.admin.data.models.User;
+import com.smontiel.ferretera.admin.features.ShowOrdersActivity;
+import com.smontiel.ferretera.admin.features.ShowSucursalesActivity;
 import com.smontiel.ferretera.admin.features.buscar_codigo_barras.BuscarCodigoActivity;
 import com.smontiel.ferretera.admin.features.buscar_codigo_barras.RxSearch;
 import com.smontiel.ferretera.admin.features.create_sucursal.CreateSucursalActivity;
@@ -136,6 +138,8 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        presenter.subscribe();
         drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
@@ -150,6 +154,15 @@ public class DashboardActivity extends AppCompatActivity {
     void updateDrawerItems(List<Sucursal> sucursales) {
         progressDialog.dismiss();
         List<IDrawerItem> items = new ArrayList<>();
+        items.add(new PrimaryDrawerItem()
+                .withName("Mostrar sucursales")
+                .withIcon(CommunityMaterial.Icon2.cmd_map)
+                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                    startActivity(new Intent(this, ShowSucursalesActivity.class));
+                    drawer.closeDrawer();
+                    return true;
+                })
+        );
         for (Sucursal s : sucursales) {
             items.add(new PrimaryDrawerItem()
                     .withIdentifier(s.id)
@@ -175,6 +188,7 @@ public class DashboardActivity extends AppCompatActivity {
             );
         }
         drawer.removeAllItems();
+        drawer.removeAllStickyFooterItems();
         drawer.addItems(drawerItems(items).toArray(new IDrawerItem[0]));
         drawer.addStickyFooterItem(new PrimaryDrawerItem()
                 .withName("Cerrar sesión")
@@ -185,7 +199,8 @@ public class DashboardActivity extends AppCompatActivity {
                     finish();
                     return true;
                 }));
-        if (sucursales.size() > 0) drawer.setSelection(sucursales.get(0).id, true);
+        boolean fireOnClick = dashboardFragment.getItemCount() <= 0;
+        if (sucursales.size() > 0) drawer.setSelection(sucursales.get(0).id, fireOnClick);
     }
 
     private List<IDrawerItem> drawerItems(List<IDrawerItem> sucursalItems) {
@@ -207,6 +222,14 @@ public class DashboardActivity extends AppCompatActivity {
                     .withIcon(MaterialDesignIconic.Icon.gmi_apps)
                     .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                         startActivity(ShowProductsActivity.getStartIntent(DashboardActivity.this));
+                        return false;
+                    })
+            );
+            items.add(new PrimaryDrawerItem()
+                    .withName("Órdenes")
+                    .withIcon(MaterialDesignIconic.Icon.gmi_apps)
+                    .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                        startActivity(new Intent(DashboardActivity.this, ShowOrdersActivity.class));
                         return false;
                     })
             );
